@@ -1,14 +1,18 @@
 # Sample Hardhat Project: Dex for Trading Cryptos
 
 # Link to vercel deployed frontend
+https://dex-for-trading-cryptos.vercel.app
 
 # Link to github repo
+https://github.com/Barry-White17/dex-for-trading-cryptos
 
 ### Info
 
-- Note should be taken that the project's UI is just wireframe now, to showcase a working architecture.
-
-- A production build is to be made with ShadcnUI and TailwindCss
+* Note should be taken;
+-  That the project's UI is just wireframe now, to showcase a working architecture.
+- That the project is self-initiated to showcase competence
+- 
+- A production build for ui is to be made with ShadcnUI and TailwindCss
 
 ## How to use the project
 
