@@ -11,14 +11,14 @@ async function main() {
   const [deployer] = await ethers.getSigners();
 
   const contractList = [
-    // "Contract Name", "Contract Factory Name"
+    //"Contract Name","Contract Factory Name"
     ["Simple DeFi Token", "SimpleDeFiToken"],
     ["Meme Token", "MemeToken"],
     ["Foo Token", "FooToken"],
     ["Bar Token", "BarToken"],
     ["Wrapped ETH", "WETH"],
     ["Pair Factory", "PairFactory"],
-    ["AMM Router", "AMMRouter"], // AMMRouter must come after PairFactory and WETH
+    // ["AMM Router", "AMMRouter"], // AMMRouter must come after PairFactory and WETH
   ];
 
   let pairFactoryAddress;
@@ -27,9 +27,10 @@ async function main() {
   // Deploying the smart contracts and save contracts to frontend
   for (const [name, factory] of contractList) {
     let contractFactory = await ethers.getContractFactory(factory);
-    let contract = factory === "AMMRouter" ?
-      await contractFactory.deploy(pairFactoryAddress, wethAddress) :
-      await contractFactory.deploy();
+    let contract =
+      factory === "AMMRouter"
+        ? await contractFactory.deploy(pairFactoryAddress, wethAddress)
+        : await contractFactory.deploy();
     console.log(`${name} Contract Address:`, contract.address);
     if (factory === "PairFactory") {
       pairFactoryAddress = contract.address;
@@ -40,7 +41,10 @@ async function main() {
   }
 
   console.log("Deployer: ", deployer.address);
-  console.log("Deployer ETH balance: ", (await deployer.getBalance()).toString());
+  console.log(
+    "Deployer ETH balance: ",
+    (await deployer.getBalance()).toString(),
+  );
 }
 
 function saveContractToFrontend(contract, name) {
@@ -51,14 +55,14 @@ function saveContractToFrontend(contract, name) {
 
   fs.writeFileSync(
     contractsDir + `/${name}-address.json`,
-    JSON.stringify({ address: contract.address }, undefined, 2)
+    JSON.stringify({ address: contract.address }, undefined, 2),
   );
 
   const contractArtifact = artifacts.readArtifactSync(name);
 
   fs.writeFileSync(
     contractsDir + `/${name}.json`,
-    JSON.stringify(contractArtifact, null, 2)
+    JSON.stringify(contractArtifact, null, 2),
   );
 }
 

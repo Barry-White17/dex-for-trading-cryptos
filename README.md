@@ -1,6 +1,16 @@
-# Sample Hardhat Project: DeFi Apps
+# Sample Hardhat Project: Dex for Trading Cryptos
 
-Prior to running the code in the project, please make sure [node.js](https://nodejs.org/) is installed.
+# Link to vercel deployed frontend
+
+# Link to github repo
+
+### Info
+
+- Note should be taken that the project's UI is just wireframe now, to showcase a working architecture.
+
+- A production build is to be made with ShadcnUI and TailwindCss
+
+## How to use the project
 
 ## Useful Commands
 
@@ -41,6 +51,7 @@ Start Hardhat console with local EVM:
 ```shell
 npx hardhat console --network localhost
 ```
+
 Run test cases with Hardhat:
 
 ```shell
@@ -54,3 +65,70 @@ npm start
 ```
 
 **Enjoy the exploration!**
+
+## Foundry
+
+**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+
+Foundry consists of:
+
+- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
+- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
+- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+
+## Documentation
+
+https://book.getfoundry.sh/
+
+## Usage
+
+### Build
+
+```shell
+$ forge build
+```
+
+### Test
+
+```shell
+$ forge test
+```
+
+### Format
+
+```shell
+$ forge fmt
+```
+
+### Gas Snapshots
+
+```shell
+$ forge snapshot
+```
+
+### Anvil
+
+```shell
+$ anvil
+```
+
+### Deploy
+
+```shell
+$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
+
+### Cast
+
+```shell
+$ cast <subcommand>
+```
+
+### Help
+
+```shell
+$ forge --help
+$ anvil --help
+$ cast --help
+```
