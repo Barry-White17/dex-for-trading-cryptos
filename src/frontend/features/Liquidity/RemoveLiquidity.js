@@ -57,8 +57,8 @@ const RemoveLiquidity = () => {
     try {
       const tokenPair = new ethers.Contract(pair, TokenPairABI, library.getSigner())
       const [_reserveA, _reserveB,] = await tokenPair.getReserves();
-      setReserveA(ethers.utils.formatUnits(_reserveA, tokenA.decimals));
-      setReserveB(ethers.utils.formatUnits(_reserveB, tokenB.decimals));
+      setReserveA(ethers.formatUnits(_reserveA, tokenA.decimals));
+      setReserveB(ethers.formatUnits(_reserveB, tokenB.decimals));
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get reserves!"));
       console.error(error);
@@ -69,7 +69,7 @@ const RemoveLiquidity = () => {
     try {
       const tokenPair = new ethers.Contract(pair, TokenPairABI, library.getSigner())
       const _totalSupply = await tokenPair.totalSupply();
-      setTotalSupply(ethers.utils.formatUnits(_totalSupply));
+      setTotalSupply(ethers.formatUnits(_totalSupply));
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get total supply of token pair!"));
       console.error(error);
@@ -80,7 +80,7 @@ const RemoveLiquidity = () => {
     try {
       const tokenPair = new ethers.Contract(pair, TokenPairABI, library.getSigner());
       const _allowAmount = await tokenPair.allowance(account, AMMRouterAddress.address);
-      setAllowAmount(ethers.utils.formatUnits(_allowAmount));
+      setAllowAmount(ethers.formatUnits(_allowAmount));
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get allowance of token pair!"));
       console.error(error);
@@ -115,7 +115,7 @@ const RemoveLiquidity = () => {
     setLoading(true);
     try {
       const tokenPair = new ethers.Contract(pair, TokenPairABI, library.getSigner());
-      const _allowAmount = ethers.utils.parseUnits(toString(amount));
+      const _allowAmount = ethers.parseUnits(toString(amount));
       const tx = await tokenPair.approve(AMMRouterAddress.address, _allowAmount);
       await tx.wait();
       toast.info("Liquidity removal is enabled!");
@@ -135,13 +135,13 @@ const RemoveLiquidity = () => {
       let tx;
       if (isETH(tokenA)) {
         tx = await ammRouter.removeLiquidityETH(tokenB.address,
-          ethers.utils.parseUnits(toString(amount)), 0, 0, account, deadline);
+          ethers.parseUnits(toString(amount)), 0, 0, account, deadline);
       } else if (isETH(tokenB)) {
         tx = await ammRouter.removeLiquidityETH(tokenA.address,
-          ethers.utils.parseUnits(toString(amount)), 0, 0, account, deadline);
+          ethers.parseUnits(toString(amount)), 0, 0, account, deadline);
       } else {
         tx = await ammRouter.removeLiquidity(tokenA.address, tokenB.address,
-          ethers.utils.parseUnits(toString(amount)), 0, 0, account, deadline);
+          ethers.parseUnits(toString(amount)), 0, 0, account, deadline);
       }
       await tx.wait();
       toast.info(`Liquidity removal succeeded! Transaction Hash: ${tx.hash}`);
