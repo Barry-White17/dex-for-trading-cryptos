@@ -65,8 +65,8 @@ const AddLiquidity = () => {
       const ammRouter = new ethers.Contract(AMMRouterAddress.address, AMMRouterABI.abi, library.getSigner());
       const [_reserveA, _reserveB, _pairAddress] = await ammRouter.getReserves(tokenA.address, tokenB.address);
       setPair(_pairAddress);
-      setReserveA(ethers.utils.formatUnits(_reserveA, tokenA.decimals));
-      setReserveB(ethers.utils.formatUnits(_reserveB, tokenB.decimals));
+      setReserveA(ethers.formatUnits(_reserveA, tokenA.decimals));
+      setReserveB(ethers.formatUnits(_reserveB, tokenB.decimals));
     } catch (error) {
       toast.info("Looks you are the first one to provide liquidity for the pair.", { toastId: 'RESERVE_0' })
       setPair('');
@@ -81,19 +81,19 @@ const AddLiquidity = () => {
     try {
       if (isETH(tokenA)) {
         const _balanceA = await library.getBalance(account);
-        setBalanceA(Number(ethers.utils.formatUnits(_balanceA)));
+        setBalanceA(Number(ethers.formatUnits(_balanceA)));
       } else {
         const _tokenA = new ethers.Contract(tokenA.address, ERC20ABI, library.getSigner());
         const _balanceA = await _tokenA.balanceOf(account);
-        setBalanceA(Number(ethers.utils.formatUnits(_balanceA, tokenA.decimals)));
+        setBalanceA(Number(ethers.formatUnits(_balanceA, tokenA.decimals)));
       }
       if (isETH(tokenB)) {
         const _balanceB = await library.getBalance(account);
-        setBalanceB(Number(ethers.utils.formatUnits(_balanceB)));
+        setBalanceB(Number(ethers.formatUnits(_balanceB)));
       } else {
         const _tokenB = new ethers.Contract(tokenB.address, ERC20ABI, library.getSigner());
         const _balanceB = await _tokenB.balanceOf(account);
-        setBalanceB(Number(ethers.utils.formatUnits(_balanceB, tokenB.decimals)));
+        setBalanceB(Number(ethers.formatUnits(_balanceB, tokenB.decimals)));
       }
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get token balances!"), { toastId: 'BALANCE_0' });
@@ -111,7 +111,7 @@ const AddLiquidity = () => {
       } else {
         const _tokenA = new ethers.Contract(tokenA.address, ERC20ABI, library.getSigner());
         let _allowA = await _tokenA.allowance(account, AMMRouterAddress.address);
-        _allowA = Number(ethers.utils.formatUnits(_allowA, tokenA.decimals));
+        _allowA = Number(ethers.formatUnits(_allowA, tokenA.decimals));
         setAllowAmountA(_allowA);
         setAllowA(_allowA >= amountA);
       }
@@ -120,7 +120,7 @@ const AddLiquidity = () => {
       } else {
         const _tokenB = new ethers.Contract(tokenB.address, ERC20ABI, library.getSigner());
         let _allowB = await _tokenB.allowance(account, AMMRouterAddress.address);
-        _allowB = Number(ethers.utils.formatUnits(_allowB, tokenB.decimals));
+        _allowB = Number(ethers.formatUnits(_allowB, tokenB.decimals));
         setAllowAmountB(_allowB);
         setAllowB(_allowB >= amountB);
       }
@@ -180,7 +180,7 @@ const AddLiquidity = () => {
     const [token, amount] = index === indexTokenA ? [tokenA, amountA] : [tokenB, amountB];
     try {
       const tokenContract = new ethers.Contract(token.address, ERC20ABI, library.getSigner());
-      const allowAmount = ethers.utils.parseUnits(toString(amount), token.decimals);
+      const allowAmount = ethers.parseUnits(toString(amount), token.decimals);
       const tx = await tokenContract.approve(AMMRouterAddress.address, allowAmount);
       await tx.wait();
       toast.info(`${token.symbol} is enabled!`);
@@ -204,16 +204,16 @@ const AddLiquidity = () => {
       let tx;
       if (isETH(tokenA)) {
         tx = await ammRouter.addLiquidityETH(tokenB.address,
-          ethers.utils.parseUnits(toString(amountB), tokenB.decimals), 0, 0, account, deadline,
+          ethers.parseUnits(toString(amountB), tokenB.decimals), 0, 0, account, deadline,
           { value: ethers.utils.parseUnits(toString(amountA)) });
       } else if (isETH(tokenB)) {
         tx = await ammRouter.addLiquidityETH(tokenA.address,
-          ethers.utils.parseUnits(toString(amountA), tokenA.decimals), 0, 0, account, deadline,
-          { value: ethers.utils.parseUnits(toString(amountB)) });
+          ethers.parseUnits(toString(amountA), tokenA.decimals), 0, 0, account, deadline,
+          { value: ethers.parseUnits(toString(amountB)) });
       } else {
         tx = await ammRouter.addLiquidity(tokenA.address, tokenB.address,
-          ethers.utils.parseUnits(toString(amountA), tokenA.decimals),
-          ethers.utils.parseUnits(toString(amountB), tokenB.decimals),
+          ethers.parseUnits(toString(amountA), tokenA.decimals),
+          ethers.parseUnits(toString(amountB), tokenB.decimals),
           0, 0, account, deadline);
       }
       await tx.wait();
