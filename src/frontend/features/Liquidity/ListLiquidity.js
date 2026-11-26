@@ -62,8 +62,8 @@ const ListLiquidity = () => {
     setSharePercent(100 * shareRatio);
 
     let [_reserveA, _reserveB,] = await lpToken.getReserves();
-    setPooledTokenA(Number(ethers.utils.formatUnits(_reserveA, pair.tokenA.decimals)) * shareRatio);
-    setPooledTokenB(Number(ethers.utils.formatUnits(_reserveB, pair.tokenB.decimals)) * shareRatio);
+    setPooledTokenA(Number(ethers.formatUnits(_reserveA, pair.tokenA.decimals)) * shareRatio);
+    setPooledTokenB(Number(ethers.formatUnits(_reserveB, pair.tokenB.decimals)) * shareRatio);
   };
 
   useEffect(() => {
