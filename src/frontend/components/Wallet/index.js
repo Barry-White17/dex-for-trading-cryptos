@@ -23,4 +23,4 @@ export const walletConnectConnector = new WalletConnectConnector({
   qrcode: true,
 });
 
-export const localProvider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_LOCAL_RPC_URL);
+export const localProvider = new ethers.JsonRpcProvider(process.env.REACT_APP_LOCAL_RPC_URL);
