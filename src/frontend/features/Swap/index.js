@@ -217,9 +217,9 @@ const Swap = () => {
       let max = Number.MIN_SAFE_INTEGER;
       let _bestPath = null;
       for (const path of paths) {
-        const _amount = ethers.utils.parseUnits(toString(amount), tokenA.decimals);
+        const _amount = ethers.parseUnits(toString(amount), tokenA.decimals);
         const amounts = await ammRouter.getAmountsOut(_amount, path);
-        const _amountB = Number(ethers.utils.formatUnits(amounts[amounts.length - 1], tokenB.decimals));
+        const _amountB = Number(ethers.formatUnits(amounts[amounts.length - 1], tokenB.decimals));
         if (_amountB > max) {
           max = _amountB;
           _bestPath = path;
@@ -364,7 +364,7 @@ const Swap = () => {
       const contract = new ethers.Contract(WETH.address, WETHABI.abi, library.getSigner());
       const tx = await (swapMode === MODE_WRAP ?
         contract.deposit({ value: ethers.utils.parseUnits(toString(amountA)) }) :
-        contract.withdraw(ethers.utils.parseUnits(toString(amountA))));
+        contract.withdraw(ethers.parseUnits(toString(amountA))));
       await tx.wait();
       toast.info(`${swapMode === MODE_WRAP ? "wrap" : "unwrap"} succeeded! Transaction Hash: ${tx.hash}`);
       setAmountA(0);
