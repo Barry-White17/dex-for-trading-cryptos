@@ -21,7 +21,7 @@ const TokenOperations = () => {
     try {
       const contract = new ethers.Contract(TokenAddress.address, TokenABI.abi, localProvider);
       const response = await contract.totalSupply();
-      setTotalSupply(ethers.utils.formatEther(response));
+      setTotalSupply(ethers.formatEther(response));
     } catch (error) {
       console.error('Cannot get total supply', error);
     }
@@ -32,7 +32,7 @@ const TokenOperations = () => {
     try {
       let contract = new ethers.Contract(TokenAddress.address, TokenABI.abi, library.getSigner());
       const response = await contract.balanceOf(account);
-      setYourBalance(ethers.utils.formatEther(response));
+      setYourBalance(ethers.formatEther(response));
     } catch (error) {
       console.error('Cannot get your balance', error);
     }
@@ -48,7 +48,7 @@ const TokenOperations = () => {
     const address = autoBurn ? addressBurn : addressNormal;
     const amount = autoBurn ? amountBurn : amountNormal;
 
-    if (!ethers.utils.isAddress(address)) {
+    if (!ethers.isAddress(address)) {
       toast.error(`The recipient address for ${type} transfer is invalid!`);
       return;
     }
@@ -59,8 +59,8 @@ const TokenOperations = () => {
     try {
       const contract = new ethers.Contract(TokenAddress.address, TokenABI.abi, library.getSigner());
       const tx = autoBurn ?
-        await contract.transferWithAutoBurn(address, ethers.utils.parseUnits(amount, 'ether')) :
-        await contract.transfer(address, ethers.utils.parseUnits(amount, 'ether'));
+        await contract.transferWithAutoBurn(address, ethers.parseUnits(amount, 'ether')) :
+        await contract.transfer(address, ethers.parseUnits(amount, 'ether'));
       toast.info(`Transaction Submitted! TxHash: ${tx.hash}`);
       await tx.wait();
       toast.info(`Transaction Succeeded! TxHash: ${tx.hash}`);
