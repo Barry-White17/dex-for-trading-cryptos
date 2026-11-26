@@ -363,7 +363,7 @@ const Swap = () => {
     try {
       const contract = new ethers.Contract(WETH.address, WETHABI.abi, library.getSigner());
       const tx = await (swapMode === MODE_WRAP ?
-        contract.deposit({ value: ethers.utils.parseUnits(toString(amountA)) }) :
+        contract.deposit({ value: ethers.parseUnits(toString(amountA)) }) :
         contract.withdraw(ethers.parseUnits(toString(amountA))));
       await tx.wait();
       toast.info(`${swapMode === MODE_WRAP ? "wrap" : "unwrap"} succeeded! Transaction Hash: ${tx.hash}`);
