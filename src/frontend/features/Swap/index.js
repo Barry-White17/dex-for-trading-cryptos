@@ -127,7 +127,7 @@ const Swap = () => {
     try {
       const _token = new ethers.Contract(tokenA.address, ERC20ABI, library.getSigner());
       let _allow = await _token.allowance(account, AMMRouterAddress.address);
-      _allow = Number(ethers.utils.formatUnits(_allow, tokenA.decimals));
+      _allow = Number(ethers.formatUnits(_allow, tokenA.decimals));
       setAllowAmount(_allow);
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot check allowances!"));
@@ -142,19 +142,19 @@ const Swap = () => {
     try {
       if (isETH(tokenA)) {
         const _balanceA = await library.getBalance(account);
-        setBalanceA(Number(ethers.utils.formatUnits(_balanceA)));
+        setBalanceA(Number(ethers.formatUnits(_balanceA)));
       } else {
         const _tokenA = new ethers.Contract(tokenA.address, ERC20ABI, library.getSigner());
         const _balanceA = await _tokenA.balanceOf(account);
-        setBalanceA(Number(ethers.utils.formatUnits(_balanceA, tokenA.decimals)));
+        setBalanceA(Number(ethers.formatUnits(_balanceA, tokenA.decimals)));
       }
       if (isETH(tokenB)) {
         const _balanceB = await library.getBalance(account);
-        setBalanceB(Number(ethers.utils.formatUnits(_balanceB)));
+        setBalanceB(Number(ethers.formatUnits(_balanceB)));
       } else {
         const _tokenB = new ethers.Contract(tokenB.address, ERC20ABI, library.getSigner());
         const _balanceB = await _tokenB.balanceOf(account);
-        setBalanceB(Number(ethers.utils.formatUnits(_balanceB, tokenB.decimals)));
+        setBalanceB(Number(ethers.formatUnits(_balanceB, tokenB.decimals)));
       }
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get token balances!"), { toastId: 'BALANCE_0' });
@@ -247,9 +247,9 @@ const Swap = () => {
       let min = Number.MAX_SAFE_INTEGER;
       let _bestPath = null;
       for (const path of paths) {
-        const _amount = ethers.utils.parseUnits(toString(amountB), tokenA.decimals);
+        const _amount = ethers.parseUnits(toString(amountB), tokenA.decimals);
         const amounts = await ammRouter.getAmountsIn(_amount, path);
-        const _amountA = Number(ethers.utils.formatUnits(amounts[0], tokenA.decimals));
+        const _amountA = Number(ethers.formatUnits(amounts[0], tokenA.decimals));
         if (_amountA < min) {
           min = _amountA;
           _bestPath = path;
@@ -283,8 +283,8 @@ const Swap = () => {
     let oldPrice = 1;
     for (let i = 0; i < path.length - 1; i++) {
       const [reserveA, reserveB,] = await ammRouter.getReserves(path[i], path[i + 1]);
-      oldPrice = oldPrice * Number(ethers.utils.formatUnits(reserveA, graph.get(path[i]).token.decimals))
-        / Number(ethers.utils.formatUnits(reserveB, graph.get(path[i + 1]).token.decimals));
+      oldPrice = oldPrice * Number(ethers.formatUnits(reserveA, graph.get(path[i]).token.decimals))
+        / Number(ethers.formatUnits(reserveB, graph.get(path[i + 1]).token.decimals));
     }
     setPriceImpact(100 * (newPrice / oldPrice - 1));
   }
@@ -293,7 +293,7 @@ const Swap = () => {
     setLoading(true);
     try {
       const _token = new ethers.Contract(tokenA.address, ERC20ABI, library.getSigner());
-      const _allowAmount = ethers.utils.parseUnits(toString(amountA), tokenA.decimals);
+      const _allowAmount = ethers.parseUnits(toString(amountA), tokenA.decimals);
       const tx = await _token.approve(AMMRouterAddress.address, _allowAmount);
       await tx.wait();
       toast.info(`${tokenA.symbol} is enabled!`);
@@ -313,35 +313,35 @@ const Swap = () => {
       if (isETH(tokenA)) {
         tx = await (tokenIndex === indexTokenA ?
           ammRouter.swapExactETHForTokens(
-            ethers.utils.parseUnits(toString(amountB * 0.9), tokenB.decimals),
+            ethers.parseUnits(toString(amountB * 0.9), tokenB.decimals),
             bestPath, account, deadline, {
-            value: ethers.utils.parseUnits(toString(amountA), tokenA.decimals)
+            value: ethers.parseUnits(toString(amountA), tokenA.decimals)
           }) :
           ammRouter.swapETHForExactTokens(
-            ethers.utils.parseUnits(toString(amountB), tokenB.decimals),
+            ethers.parseUnits(toString(amountB), tokenB.decimals),
             bestPath, account, deadline, {
-            value: ethers.utils.parseUnits(toString(amountA * 1.1), tokenA.decimals)
+            value: ethers.parseUnits(toString(amountA * 1.1), tokenA.decimals)
           }));
       } else if (isETH(tokenB)) {
         tx = await (tokenIndex === indexTokenA ?
           ammRouter.swapExactTokensForETH(
-            ethers.utils.parseUnits(toString(amountA), tokenA.decimals),
-            ethers.utils.parseUnits(toString(amountB * 0.9), tokenB.decimals),
+            ethers.parseUnits(toString(amountA), tokenA.decimals),
+            ethers.parseUnits(toString(amountB * 0.9), tokenB.decimals),
             bestPath, account, deadline) :
           ammRouter.swapTokensForExactETH(
-            ethers.utils.parseUnits(toString(amountB), tokenB.decimals),
-            ethers.utils.parseUnits(toString(amountA * 1.1), tokenA.decimals),
+            ethers.parseUnits(toString(amountB), tokenB.decimals),
+            ethers.parseUnits(toString(amountA * 1.1), tokenA.decimals),
             bestPath, account, deadline
           ));
       } else {
         tx = await (tokenIndex === indexTokenA ?
           ammRouter.swapExactTokensForTokens(
-            ethers.utils.parseUnits(toString(amountA), tokenA.decimals),
-            ethers.utils.parseUnits(toString(amountB * 0.9), tokenB.decimals),  // Min acceptable receiving amount
+            ethers.parseUnits(toString(amountA), tokenA.decimals),
+            ethers.parseUnits(toString(amountB * 0.9), tokenB.decimals),  // Min acceptable receiving amount
             bestPath, account, deadline) :
           ammRouter.swapTokensForExactTokens(
-            ethers.utils.parseUnits(toString(amountB), tokenB.decimals),
-            ethers.utils.parseUnits(toString(amountA * 1.1), tokenA.decimals),  // Max acceptable spending amount
+            ethers.parseUnits(toString(amountB), tokenB.decimals),
+            ethers.parseUnits(toString(amountA * 1.1), tokenA.decimals),  // Max acceptable spending amount
             bestPath, account, deadline
           ));
       }
