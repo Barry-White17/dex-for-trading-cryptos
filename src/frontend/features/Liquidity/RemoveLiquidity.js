@@ -46,7 +46,7 @@ const RemoveLiquidity = () => {
     try {
       const tokenPair = new ethers.Contract(pair, TokenPairABI, library.getSigner());
       const _balance = await tokenPair.balanceOf(account);
-      setBalance(ethers.utils.formatUnits(_balance));
+      setBalance(ethers.formatUnits(_balance));
     } catch (error) {
       toast.error(getErrorMessage(error, "Cannot get LP token balance!"));
       console.error(error);
