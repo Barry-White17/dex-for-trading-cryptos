@@ -31,13 +31,13 @@ async function main() {
       factory === "AMMRouter"
         ? await contractFactory.deploy(pairFactoryAddress, wethAddress)
         : await contractFactory.deploy();
-    console.log(`${name} Contract Address:`, contract.address);
+    console.log(`${name} Contract Address:`, await contract.getAddress();
     if (factory === "PairFactory") {
       pairFactoryAddress = contract.address;
     } else if (factory === "WETH") {
       wethAddress = contract.address;
     }
-    saveContractToFrontend(contract, factory);
+    await saveContractToFrontend(contract, factory);
   }
 
   console.log("Deployer: ", deployer.address);
@@ -47,7 +47,7 @@ async function main() {
   );
 }
 
-function saveContractToFrontend(contract, name) {
+async function saveContractToFrontend(contract, name) {
   const contractsDir = __dirname + "/../src/frontend/contracts";
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
@@ -55,7 +55,7 @@ function saveContractToFrontend(contract, name) {
 
   fs.writeFileSync(
     contractsDir + `/${name}-address.json`,
-    JSON.stringify({ address: contract.address }, undefined, 2),
+    JSON.stringify({ address: await contract.getAddress() }, undefined, 2),
   );
 
   const contractArtifact = artifacts.readArtifactSync(name);
