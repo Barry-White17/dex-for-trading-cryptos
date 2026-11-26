@@ -205,7 +205,7 @@ const AddLiquidity = () => {
       if (isETH(tokenA)) {
         tx = await ammRouter.addLiquidityETH(tokenB.address,
           ethers.parseUnits(toString(amountB), tokenB.decimals), 0, 0, account, deadline,
-          { value: ethers.utils.parseUnits(toString(amountA)) });
+          { value: ethers.parseUnits(toString(amountA)) });
       } else if (isETH(tokenB)) {
         tx = await ammRouter.addLiquidityETH(tokenA.address,
           ethers.parseUnits(toString(amountA), tokenA.decimals), 0, 0, account, deadline,
